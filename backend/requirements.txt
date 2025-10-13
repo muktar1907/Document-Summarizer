@@ -1,2 +1,6 @@
 fastapi==0.117.1
 uvicorn==0.15.0
+sentence-transformers
+spacy
+tiktoken
+#python3 -m spacy download en_core_web_sm Defaulting to user installation because normal site-packages is not writeable
