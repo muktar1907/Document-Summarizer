@@ -2,10 +2,12 @@
   "compilerOptions": {
     "target": "ESNext", // or another valid target
     "module": "commonjs",
+    "jsx": "react-jsx",
     "strict": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["vite/client"]
+    "types": ["node", "react", "vite/client"],
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
   },
   "files": [],
   "references": [
