@@ -136,60 +136,7 @@ def get_document_text(document_id: str, file_ext: str) -> str:
         # Re-raise as HTTPException for client feedback
         raise HTTPException(status_code=500, detail=f"Text extraction failed: {e.__class__.__name__}")
 
-"""
-def get_document_text(document_id: str, file_ext: str) -> str:
-    
-    #Retrieves the document from GCS and performs OCR for non-text files.
-    
-    try:
-        # This still uses the bucket name, but the client is initialized with the correct project ID.
-        bucket = storage_client.bucket(GCS_BUCKET_NAME)
-        blob = bucket.blob(document_id)
-        
-        if not blob.exists():
-            raise FileNotFoundError(f"Document not found at path: {document_id}")
 
-        # Download the file contents into a buffer
-        downloaded_contents = io.BytesIO()
-        blob.download_to_file(downloaded_contents)
-        downloaded_contents.seek(0)
-
-        # 1. Handle plain text files directly
-        if file_ext == 'txt':
-            text_content = downloaded_contents.getvalue().decode('utf-8', errors='ignore')
-            print("Detected file type: TXT. Reading content directly.")
-            return text_content
-        
-        # 2. Handle image and small PDF/DOCX files using Vision API for OCR
-        print(f"Detected file type: {file_ext}. Attempting OCR via Cloud Vision API...")
-
-        # Use vision.Image 
-        image = vision.Image(content=downloaded_contents.getvalue())
-        
-        # Use DOCUMENT_TEXT_DETECTION for higher fidelity OCR on documents
-        response = vision_client.document_text_detection(image=image)
-        
-        text_content = response.full_text_annotation.text if response.full_text_annotation else ""
-        
-        if not text_content:
-            print("Warning: OCR returned no text. Trying basic text detection.")
-            response = vision_client.text_detection(image=image)
-            # The first annotation contains the entire extracted text
-            text_content = response.text_annotations[0].description if response.text_annotations else ""
-
-        if not text_content:
-             print(f"OCR failed to extract any text from {document_id}")
-             raise ValueError("OCR failed to extract readable text from the document.")
-
-        return text_content
-
-    except FileNotFoundError as e:
-        raise HTTPException(status_code=404, detail=str(e))
-    except Exception as e:
-        print(f"OCR/GCS Download Error: {e}")
-        # Re-raise as HTTPException for client feedback
-        raise HTTPException(status_code=500, detail=f"Text extraction failed: {e.__class__.__name__}")
-"""
 
 # --- Endpoint 1: UPLOAD DOCUMENT ---
 @app.post('/upload-document')
